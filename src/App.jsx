@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react'
+import Card from '@mui/material/Card';
 import { getAreaData } from './api'
 
 import './App.css'
+import { CardContent, Typography } from '@mui/material';
 
 function App() {
 
@@ -13,7 +15,7 @@ function App() {
   const load = async () => {
     try {
       const areaData = await getAreaData(submitOutcode)
-  
+      
       setAreas(areaData);
     } catch (error) {
       console.log(error)
@@ -29,6 +31,8 @@ function App() {
       setError(false)
       setSubmitOutcode(newOutcode)
     } else {
+      setAreas([])
+      setSubmitOutcode('')
       setError(true)
     }
   
@@ -57,6 +61,20 @@ function App() {
       </form>
       {error ? <p>Invalid outcode format.</p> : null}
       {areas.length ? <h2>{`Areas for ${submitOutcode}: ${areas.length}`}</h2> : null}
+      
+         {areas.map((area) => {
+           return (
+            <Card>
+              <CardContent>
+                <Typography>{`Area: ${area["place name"]}`}</Typography>
+                <Typography>{`Longitude: ${area.longitude}`}</Typography>
+                <Typography>{`Latitude: ${area.latitude}`}</Typography>
+                <Typography>{`State: ${area.state}`}</Typography>
+              </CardContent>
+            </Card>
+           )
+         })}
+         
     </div>
   )
 }
